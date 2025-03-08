@@ -39,9 +39,13 @@
             version = "0.0.1";
             buildInputs = [
               pkgs.zig
+
               pkgs.libgcc
               pkgs.glibc
               pkgs.glibc.static
+              pkgs.clang
+              pkgs.tinycc
+
               pkgs.cosmopolitan
               pkgs.cosmocc
               pkgs.binutils # bin/objcopy
@@ -53,9 +57,16 @@
             ];
 
             buildPhase = ''
-              # gcc builds for comparison
+              # gcc builds
               gcc -o ${exe_name}-gcc-dynamic $src/main.c
               gcc -static -o ${exe_name}-gcc-static $src/main.c
+
+              # clang builds
+              clang -o ${exe_name}-clang-dynamic $src/main.c
+              clang -static -o ${exe_name}-clang-static $src/main.c
+
+              # tinycc build
+              tcc -o ${exe_name}-tcc $src/main.c
 
               cosmocc -o ${exe_name}-cosmo.exe $src/main.c
               objcopy -S -O binary ${exe_name}-cosmo.exe ${exe_name}-cosmo.exe
