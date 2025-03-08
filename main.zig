@@ -1,5 +1,6 @@
 const std = @import("std");
 
 pub fn main() !void {
-    std.debug.print("hello, world\n", .{});
+    const stdout = std.io.getStdOut().writer();
+    try stdout.writeAll("hello, world\n");
 }
