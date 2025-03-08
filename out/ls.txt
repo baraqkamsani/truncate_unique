@@ -1,0 +1,16 @@
+total 12M
+-rwxr-xr-x 1 nixbld nixbld 2.2M Mar  8 19:42 hello_world-zig-linux-aarch64
+-rwxr-xr-x 1 nixbld nixbld 2.2M Mar  8 19:42 hello_world-zig-linux-x86_64
+-rw-r--r-- 1 nixbld nixbld 1.4M Mar  8 19:42 hello_world-zig-windows-x86_64.pdb
+-rw-r--r-- 1 nixbld nixbld 1.1M Mar  8 19:42 hello_world-zig-windows-aarch64.pdb
+-rwxr-xr-x 1 nixbld nixbld 875K Mar  8 19:42 hello_world-zig-macos-x86_64
+-rwxr-xr-x 1 nixbld nixbld 761K Mar  8 19:42 hello_world-zig-macos-aarch64
+-rwxr-xr-x 1 nixbld nixbld 755K Mar  8 19:42 hello_world-zig-windows-x86_64.exe
+-rwxr-xr-x 1 nixbld nixbld 739K Mar  8 19:42 hello_world-clang-static
+-rwxr-xr-x 1 nixbld nixbld 731K Mar  8 19:42 hello_world-gcc-static
+-rwxr-xr-x 1 nixbld nixbld 712K Mar  8 19:42 hello_world-zig-windows-aarch64.exe
+-rwxr-xr-x 1 nixbld nixbld 140K Mar  8 19:42 hello_world-cosmo.exe
+-rwxr-xr-x 1 nixbld nixbld  16K Mar  8 19:42 hello_world-clang-dynamic
+-rwxr-xr-x 1 nixbld nixbld  16K Mar  8 19:42 hello_world-gcc-dynamic
+-rwxr-xr-x 1 nixbld nixbld 6.1K Mar  8 19:42 hello_world-tcc
+-rw-r--r-- 1 nixbld nixbld    0 Mar  8 19:42 ls.txt
