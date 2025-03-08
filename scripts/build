@@ -1,15 +1,11 @@
 #!/bin/sh
 # shellcheck shell=sh
 
-repository_root="$(dirname "$(realpath "$0")")"
-cd "$repository_root" || fail "Error: cannot cd into $repository_root"
-
+fail() { printf \\033\[0\;31m%s\\033\[0m\\n "$*" >/dev/stderr; exit 1 ; }
 set -eu
 
-fail() {
-  printf \\033\[0\;31m%s\\033\[0m\\n "$*" > /dev/stderr
-  exit 1
-}
+repository_root="$(realpath "$(dirname "$(dirname "$0")")")"
+cd "$repository_root" || fail "Error: cannot cd into $repository_root"
 
 if test -d ./out
 then

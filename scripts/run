@@ -1,0 +1,26 @@
+#!/bin/sh
+# shellcheck shell=sh
+
+fail() { printf \\033\[0\;31m%s\\033\[0m\\n "$*" >/dev/stderr; exit 1 ; }
+
+repository_out="$(realpath "$(dirname "$(dirname "$0")")")/out"
+cd "$repository_out" || fail "Error: cannot cd into $repository_out"
+
+printf "\n%-50s %-10s %s\n" "FILE" "SIZE" "TYPE"
+printf "%-50s %-10s %s\n" "--------------------------------------------" "----------" "------------------------------------"
+
+for i in ./hello_world*; do
+  name=$(basename "$i")
+  size=$(du -h "$i" | awk '{print $1}')
+  type=$(file "$i" | awk -F': ' '{print $2}' | sed -E 's@/nix/store/\w{32}-@@g')
+
+  printf "%-50s %-10s %s\n" "$name" "$size" "$type"
+
+  output=$($i 2>/dev/null)
+  if test "$?" -eq 0
+  then
+    printf "  └─ Output: %s\n\n" "$output"
+  else
+    printf "  └─ (Not executable on this platform)\n\n"
+  fi
+done
