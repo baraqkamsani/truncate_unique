@@ -1,0 +1,45 @@
+
+FILE                                               SIZE       TYPE
+--------------------------------------------       ---------- ------------------------------------
+hello_world-clang-dynamic                          16K        ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter glibc-2.40-66/lib/ld-linux-x86-64.so.2, for GNU/Linux 3.10.0, not stripped
+  └─ Output: hello, world
+
+hello_world-clang-static                           740K       ELF 64-bit LSB executable, x86-64, version 1 (GNU/Linux), statically linked, for GNU/Linux 3.10.0, not stripped
+  └─ Output: hello, world
+
+hello_world-cosmo.exe                              140K       DOS/MBR boot sector; partition 1 
+  └─ Output: hello, world
+
+hello_world-gcc-dynamic                            16K        ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter glibc-2.40-66/lib/ld-linux-x86-64.so.2, for GNU/Linux 3.10.0, not stripped
+  └─ Output: hello, world
+
+hello_world-gcc-static                             732K       ELF 64-bit LSB executable, x86-64, version 1 (GNU/Linux), statically linked, for GNU/Linux 3.10.0, not stripped
+  └─ Output: hello, world
+
+hello_world-tcc                                    8.0K       ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter glibc-2.40-66/lib/ld-linux-x86-64.so.2, for GNU/Linux 3.10.0, stripped
+  └─ Output: hello, world
+
+hello_world-zig-linux-aarch64                      2.2M       ELF 64-bit LSB executable, ARM aarch64, version 1 (SYSV), statically linked, with debug_info, not stripped
+  └─ (Not executable on this platform)
+
+hello_world-zig-linux-x86_64                       2.2M       ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, with debug_info, not stripped
+  └─ Output: hello, world
+
+hello_world-zig-macos-aarch64                      764K       Mach-O 64-bit arm64 executable, flags:<NOUNDEFS|DYLDLINK|TWOLEVEL|NO_REEXPORTED_DYLIBS|PIE|HAS_TLV_DESCRIPTORS>
+  └─ (Not executable on this platform)
+
+hello_world-zig-macos-x86_64                       876K       Mach-O 64-bit x86_64 executable, flags:<NOUNDEFS|DYLDLINK|TWOLEVEL|WEAK_DEFINES|BINDS_TO_WEAK|NO_REEXPORTED_DYLIBS|PIE|HAS_TLV_DESCRIPTORS>
+  └─ (Not executable on this platform)
+
+hello_world-zig-windows-aarch64.exe                712K       PE32+ executable (console) Aarch64, for MS Windows, 7 sections
+  └─ (Not executable on this platform)
+
+hello_world-zig-windows-aarch64.pdb                1.1M       MSVC program database ver 7.00, 4096*278 bytes
+  └─ (Not executable on this platform)
+
+hello_world-zig-windows-x86_64.exe                 756K       PE32+ executable (console) x86-64, for MS Windows, 7 sections
+  └─ (Not executable on this platform)
+
+hello_world-zig-windows-x86_64.pdb                 1.4M       MSVC program database ver 7.00, 4096*350 bytes
+  └─ (Not executable on this platform)
+
