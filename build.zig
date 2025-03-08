@@ -1,18 +1,13 @@
 const std = @import("std");
 
 pub fn build(b: *std.Build) void {
-    // Standard optimization options
     const optimize = b.standardOptimizeOption(.{});
 
-    // Define targets to build for
     const targets = [_]std.Target.Query{
-        // Windows (x86_64 and ARM64)
         .{ .os_tag = .windows, .cpu_arch = .x86_64 },
         .{ .os_tag = .windows, .cpu_arch = .aarch64 },
-        // Linux (x86_64 and ARM64)
         .{ .os_tag = .linux, .cpu_arch = .x86_64 },
         .{ .os_tag = .linux, .cpu_arch = .aarch64 },
-        // macOS (x86_64 and ARM64)
         .{ .os_tag = .macos, .cpu_arch = .x86_64 },
         .{ .os_tag = .macos, .cpu_arch = .aarch64 },
     };
@@ -28,8 +23,8 @@ pub fn build(b: *std.Build) void {
             &target_name_buffer,
             "{s}-{s}",
             .{
-                @tagName(target_query.cpu_arch.?),
                 @tagName(target_query.os_tag.?),
+                @tagName(target_query.cpu_arch.?),
             },
         ) catch "unknown";
 
@@ -47,6 +42,51 @@ pub fn build(b: *std.Build) void {
         // Make the "all" step depend on building this target
         all_step.dependOn(&install_exe.step);
     }
+
+    // Create the Cosmopolitan build step
+    const cosmo_step = b.step("cosmo", "Build universal binary with Cosmopolitan");
+    const cosmo = b.addSystemCommand(&[_][]const u8{
+        "cosmocc",
+        "-o",
+        "zig-out/bin/cosmo-hello_world.exe",
+        "main.c",
+    });
+    const objcopy = b.addSystemCommand(&[_][]const u8{
+        "objcopy",
+        "-S",
+        "-O",
+        "binary",
+        "zig-out/bin/cosmo-hello_world.exe",
+        "zig-out/bin/cosmo-hello_world.exe",
+    });
+    objcopy.step.dependOn(&cosmo.step);
+    const chmod = b.addSystemCommand(&[_][]const u8{
+        "chmod",
+        "+x",
+        "zig-out/bin/cosmo-hello_world.exe",
+    });
+    chmod.step.dependOn(&objcopy.step);
+    cosmo_step.dependOn(&chmod.step);
+
+    // Also add GCC builds for comparison - placing in zig-out/bin
+    const gcc_dynamic = b.addSystemCommand(&[_][]const u8{
+        "gcc",
+        "-o",
+        "zig-out/bin/gcc-hello_world-dynamic",
+        "main.c",
+    });
+    const gcc_static = b.addSystemCommand(&[_][]const u8{
+        "gcc",
+        "-static",
+        "-o",
+        "zig-out/bin/gcc-hello_world-static",
+        "main.c",
+    });
+    cosmo_step.dependOn(&gcc_dynamic.step);
+    cosmo_step.dependOn(&gcc_static.step);
+
+    // Make "all" include the "cosmo" step as well
+    all_step.dependOn(cosmo_step);
 
     // Make "all" the default step
     b.getInstallStep().dependOn(all_step);
