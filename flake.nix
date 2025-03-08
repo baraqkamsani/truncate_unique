@@ -26,56 +26,61 @@
           exe_name = "hello_world";
         in
         {
-          packages = {
-            default = pkgs.stdenv.mkDerivation {
-              pname = exe_name;
-              version = "0.0.1";
-
-              src = ./.;
-
-              buildInputs = [
-                pkgs.libgcc
-                pkgs.glibc
-                pkgs.glibc.static
-                pkgs.cosmopolitan
-                pkgs.cosmocc
-                pkgs.binutils # bin/objcopy
-              ];
-
-              phases = [
-                "buildPhase"
-                "installPhase"
-              ];
-
-              buildPhase = ''
-                # gcc builds for comparison
-                gcc -o ${exe_name}-gcc-dynamic $src/main.c
-                gcc -static -o ${exe_name}-gcc-static $src/main.c
-
-                cosmocc -o ${exe_name}.exe $src/main.c
-                objcopy -S -O binary ${exe_name}.exe ${exe_name}.exe
-                chmod +x ${exe_name}.exe
-              '';
-
-              installPhase = ''
-                mkdir -p $out
-                cp ${exe_name}* $out
-              '';
-
-              meta = {
-                description = "";
-                license = pkgs.lib.licenses.mit;
-                maintainers = with pkgs.lib.maintainers; [ ];
-              };
-            };
+          devShells.default = pkgs.mkShell {
+            packages = config.packages.default.buildInputs ++ [
+              pkgs.file
+            ];
+            env.NIX_CONFIG = "experimental-features = nix-command flakes";
           };
 
-          devShells = {
-            default = pkgs.mkShell {
-              packages = config.packages.default.buildInputs;
-              env = {
-                NIX_CONFIG = "experimental-features = nix-command flakes";
-              };
+          packages.default = pkgs.stdenv.mkDerivation {
+            src = ./.;
+            pname = exe_name;
+            version = "0.0.1";
+            buildInputs = [
+              pkgs.zig
+              pkgs.libgcc
+              pkgs.glibc
+              pkgs.glibc.static
+              pkgs.cosmopolitan
+              pkgs.cosmocc
+              pkgs.binutils # bin/objcopy
+            ];
+
+            phases = [
+              "buildPhase"
+              "installPhase"
+            ];
+
+            buildPhase = ''
+              # gcc builds for comparison
+              gcc -o ${exe_name}-gcc-dynamic $src/main.c
+              gcc -static -o ${exe_name}-gcc-static $src/main.c
+
+              cosmocc -o ${exe_name}-cosmo.exe $src/main.c
+              objcopy -S -O binary ${exe_name}-cosmo.exe ${exe_name}-cosmo.exe
+              chmod +x ${exe_name}-cosmo.exe
+
+              export HOME=$(pwd)
+              cp -v $src/build.zig .
+              cp -v $src/main.zig .
+              ls -ltchS
+              zig build >/dev/null 2>&1
+            '';
+
+            installPhase = ''
+              mkdir -p $out
+              cp ${exe_name}* $out
+              cp zig-out/bin/* $out
+              ls -ltchHS $out >$out/ls.txt
+            '';
+
+            meta = {
+              description = "-";
+              license = pkgs.lib.licenses.mit;
+              maintainers = with pkgs.lib.maintainers; [
+                "-"
+              ];
             };
           };
         };

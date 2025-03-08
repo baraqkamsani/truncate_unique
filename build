@@ -1,26 +1,23 @@
 #!/bin/sh
-#shellcheck shell=sh
+# shellcheck shell=sh
+
+repository_root="$(dirname "$(realpath "$0")")"
+cd "$repository_root" || fail "Error: cannot cd into $repository_root"
+
 set -eu
 
-SCRIPTDIR="$(dirname "$(realpath "$0")")"
-
-main() {
-  clang-format -i --style=Chromium "$SCRIPTDIR"/*.c >/dev/null 2>&1
-  nixfmt "$SCRIPTDIR"/*.nix
-  zig fmt "$SCRIPTDIR"/*.zig
-
-  printf \\033\[1\;32m%s\\033\[0m\\n "zig build"
-  zig build
-  printf \\n\\033\[1\;32m%s\\033\[0m\\n "nix build"
-  nix build --print-build-logs
-
-  for i in $(fd -aL . "$SCRIPTDIR/result" ); do
-    printf \\n
-    nix run "nixpkgs#file" -- "$i" | sed -E 's@/nix/store/[^/]+/@@g'
-    du -h "$i" | cut -f1
-    $i
-    printf \\n
-  done
+fail() {
+  printf \\033\[0\;31m%s\\033\[0m\\n "$*" > /dev/stderr
+  exit 1
 }
 
-main
+if test -d ./out
+then
+  rm -f ./out/*
+else
+  mkdir -p ./out
+fi
+
+out="$(nix build .^out --print-out-paths --no-link --print-build-logs)"
+# shellcheck disable=SC2086
+cp -vL $out/* ./out
