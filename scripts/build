@@ -14,6 +14,11 @@ else
   mkdir -p ./out
 fi
 
-out="$(nix build .^out --print-out-paths --no-link --print-build-logs)"
+out="$(
+  nix --extra-experimental-features 'nix-command flakes' build .^out \
+  --print-out-paths \
+  --no-link \
+  --print-build-logs
+)"
 # shellcheck disable=SC2086
 cp -vL $out/* ./out
